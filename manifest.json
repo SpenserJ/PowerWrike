@@ -9,7 +9,9 @@
     }
   ],
   "web_accessible_resources": [
-    "script.js"
+    "js/*",
+    "lib/*",
+    "wrikeharder.js"
   ],
   "manifest_version": 2
 }
