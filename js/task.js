@@ -8,7 +8,6 @@ define(['js/debug', 'js/statuses'], function (debug, statuses) {
     }
 
     // If we get here, we couldn't find the record anywhere
-    debug.warn('Couldn\'t find current task');
     return false;
   }
 
@@ -20,7 +19,6 @@ define(['js/debug', 'js/statuses'], function (debug, statuses) {
   function setDefaultTaskStatus(taskId) {
     var statusKeys = Object.keys(statuses.statuses)
       , status = statuses.statuses[statusKeys[0]];
-    debug.debug('Setting task ' + taskId + '\'s status to ' + statusKeys[0]);
     changeTaskStatus(taskId, status);
     return status;
   }
