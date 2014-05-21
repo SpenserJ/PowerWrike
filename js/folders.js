@@ -12,7 +12,7 @@ define(function () {
         colorClass: 'no-color',
       };
 
-      if (val.data.metaData != null) {
+      if (val.data.metaData !== null) {
         var metadata = $.parseJSON(val.data.metaData);
         if (typeof metadata.iconCls !== 'undefined') {
           val.wrikeHarder.colorClass = metadata.iconCls.replace('w3-custom-node-', '');

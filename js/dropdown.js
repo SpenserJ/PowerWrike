@@ -12,24 +12,26 @@ define(['js/debug', 'js/statuses', 'js/task'], function (debug, statuses, task) 
 
     self.properties = {
       id: 'wrikeharder-dropdown-' + self.name.replace(/[^a-zA-Z0-9_\-]/g, '_'),
-    }
+    };
 
     debug.info('Initializing dropdown "' + self.name + '"');
     self.renderDropdown();
     self.renderButton(active);
-  }
+  };
 
 
   Dropdown.prototype.renderDropdown = function renderDropdown() {
     var self = this;
 
-    // Remove the dropdown if it already exists
-    if (self.$dropdown != null) { self.$dropdown.remove(); }
+    var $statusItems = [];
 
-    self.$dropdown = $('<div id="' + self.properties.id + '" class="x-menu x-menu-floating x-layer wspace-task-widgets-status-menu w4-shadow-frame w4-animation-fadein" style="position: absolute; z-index: 15000; visibility: hidden; left: -10000px; top: -10000px;"><a class="x-menu-focus" href="#" onclick="return false;" tabindex="-1"></a><ul class="x-menu-list"></ul></div>'),
-        $statusItems = [];
+    // Remove the dropdown if it already exists
+    if (self.$dropdown !== null) { self.$dropdown.remove(); }
+
+    self.$dropdown = $('<div id="' + self.properties.id + '" class="x-menu x-menu-floating x-layer wspace-task-widgets-status-menu w4-shadow-frame w4-animation-fadein" style="position: absolute; z-index: 15000; visibility: hidden; left: -10000px; top: -10000px;"><a class="x-menu-focus" href="#" onclick="return false;" tabindex="-1"></a><ul class="x-menu-list"></ul></div>');
 
     $.each(self.items, function (index, itemDetails) {
+      /*jshint multistr: true */
       var $item = $('\
 <li class="x-menu-list-item">\
 <a class="x-menu-item status-icon-0" hidefocus="true" unselectable="on" href="#" style="padding-left: 26px;">\
@@ -73,6 +75,7 @@ define(['js/debug', 'js/statuses', 'js/task'], function (debug, statuses, task) 
     // Hide the Wrike Status selector
     $task.find('.ct-status').remove();
 
+    /*jshint multistr: true */
     var $button = $('\
 <div class="ct-status">\
 <div class="wspace-task-settings-button x-btn-noicon">\
@@ -106,10 +109,10 @@ define(['js/debug', 'js/statuses', 'js/task'], function (debug, statuses, task) 
       var offset = $button.offset();
       self.$dropdown.css({ visibility: 'visible', left: offset.left, top: offset.top + $button.height() });
     }
-  }
+  };
 
   function createDropdown(name, items, active, menuItemClicked) {
-    return dropdowns[name] = new Dropdown(name, items, active, menuItemClicked);
+    return (dropdowns[name] = new Dropdown(name, items, active, menuItemClicked));
   }
 
   return {

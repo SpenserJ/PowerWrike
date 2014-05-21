@@ -17,7 +17,7 @@ define(['js/debug', 'js/dropdown', 'js/statuses', 'js/task'], function (debug, d
   }
 
   function getActiveStatus() {
-    var activeStatus = { name: 'Select a status', color: 'no-color' }
+    var activeStatus = { name: 'Select a status', color: 'no-color' };
     if (currentTask !== false) {
       $.each(currentTask.data.parentFolders, function (i, id) {
         if (typeof statuses.statusesById[id] !== 'undefined') {
@@ -33,7 +33,7 @@ define(['js/debug', 'js/dropdown', 'js/statuses', 'js/task'], function (debug, d
 
   var delayUpdateStatusDropdown = function delayUpdateStatusDropdown(record) {
     setTimeout(function() { shouldUpdateStatusDropdown(record); }, 0);
-  }
+  };
 
   var shouldUpdateStatusDropdown = function shouldUpdateStatusDropdown(record) {
     var currentTask = task.getCurrentTask();
