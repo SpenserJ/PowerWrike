@@ -17,7 +17,8 @@ define(['js/debug', 'js/dropdown', 'js/statuses', 'js/task'], function (debug, d
   }
 
   function getActiveStatus() {
-    var activeStatus = { name: 'Select a status', color: 'no-color' };
+    var currentTask = task.getCurrentTask()
+      , activeStatus = { name: 'Select a status', color: 'no-color' };
     if (currentTask !== false) {
       $.each(currentTask.data.parentFolders, function (i, id) {
         if (typeof statuses.statusesById[id] !== 'undefined') {
@@ -44,7 +45,12 @@ define(['js/debug', 'js/dropdown', 'js/statuses', 'js/task'], function (debug, d
       return setTimeout(function() { shouldUpdateStatusDropdown(record); }, 100);
     }
 
-    menu.renderButton(getActiveStatus());
+    // Do we need to rerender the button, or can we just update the text?
+    if ($.contains(document, menu.$button[0]) === true) {
+      menu.setActive(getActiveStatus());
+    } else {
+      menu.renderButton(getActiveStatus());
+    }
 
     // Hide the status tags now, and in 500ms to be safe
     task.hideStatusTags();

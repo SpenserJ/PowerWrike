@@ -7,8 +7,10 @@ define(['js/debug', 'js/statuses', 'js/task'], function (debug, statuses, task) 
     self.name = name;
     self.items = items;
     self.menuItemClicked = menuItemClicked;
+
+    // Set our DOM variables
     self.$dropdown = null;
-    debug.debug(self);
+    self.$button = null;
 
     self.properties = {
       id: 'wrikeharder-dropdown-' + self.name.replace(/[^a-zA-Z0-9_\-]/g, '_'),
@@ -76,16 +78,15 @@ define(['js/debug', 'js/statuses', 'js/task'], function (debug, statuses, task) 
     $task.find('.ct-status').remove();
 
     /*jshint multistr: true */
-    var $button = $('\
+    self.$button = $('\
 <div class="ct-status">\
-<div class="wspace-task-settings-button x-btn-noicon">\
-  <div class="wspace-task-tb-button-value wspace-tag-simple wspace-tag-' + active.color + '">\
-    ' + active.name + '\
+  <div class="wspace-task-settings-button x-btn-noicon">\
+    <div class="wspace-task-tb-button-value"></div>\
   </div>\
 </div>\
-</div>\
     ');
-    $button.find('.wspace-task-settings-button')
+    self.setActive(active);
+    self.$button.find('.wspace-task-settings-button')
       .hover(
         function() { $(this).addClass('x-btn-over'); },
         function() { $(this).removeClass('x-btn-over'); }
@@ -93,7 +94,14 @@ define(['js/debug', 'js/statuses', 'js/task'], function (debug, statuses, task) 
         self.setVisibility(self.$dropdown.css('visibility') === 'hidden');
       });
 
-    $task.find('.w4-task-statebar').prepend($button);
+    $task.find('.w4-task-statebar').prepend(self.$button);
+  };
+
+  Dropdown.prototype.setActive = function setActive(active) {
+    var self = this
+      , $buttonText = self.$button.find('.wspace-task-tb-button-value');
+    $buttonText.attr('class', 'wspace-task-tb-button-value wspace-tag-simple wspace-tag-' + active.color)
+               .html(active.name);
   };
 
   Dropdown.prototype.setVisibility = function setVisibility(state) {
@@ -101,13 +109,11 @@ define(['js/debug', 'js/statuses', 'js/task'], function (debug, statuses, task) 
 
     if (typeof state === 'undefined') { state = true; }
 
-    var $button = $('.wspace-task-view .ct-status');
-
     if (state === false) {
       self.$dropdown.css({ visibility: 'hidden', left: '-10000px', top: '-10000px' });
     } else {
-      var offset = $button.offset();
-      self.$dropdown.css({ visibility: 'visible', left: offset.left, top: offset.top + $button.height() });
+      var offset = self.$button.offset();
+      self.$dropdown.css({ visibility: 'visible', left: offset.left, top: offset.top + self.$button.height() });
     }
   };
 
