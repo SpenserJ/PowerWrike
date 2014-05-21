@@ -60,12 +60,13 @@ define(['js/debug', 'js/statuses', 'js/events'], function (debug, statuses, ee) 
     });
   }
 
-  function hideStatusTags() {
+  function hideFolderTags(folderGroup) {
     var $task = $('.wspace-task-view')
-      , statusNames = Object.keys(statuses.statuses);
-    // Disable removing status folders
+      , folderNames = $.map(folderGroup, function (folder) { return folder.wrikeHarder.uniquePath; });
+
+    // Hide the matching folder tags
     $task.find('.wspace-task-widgets-tags .wspace-tag-simple').filter(function() {
-      return ($.inArray($(this).text(), statusNames) !== -1);
+      return ($.inArray($(this).text(), folderNames) !== -1);
     }).hide();
   }
 
@@ -94,7 +95,7 @@ define(['js/debug', 'js/statuses', 'js/events'], function (debug, statuses, ee) 
     getCurrentTask: getCurrentTask,
     getCurrentTaskId: getCurrentTaskId,
     changeTaskStatus: changeTaskStatus,
-    hideStatusTags: hideStatusTags,
+    hideFolderTags: hideFolderTags,
     getActiveStatus: getActiveStatus,
   };
 });

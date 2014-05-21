@@ -37,8 +37,8 @@ define(['js/debug', 'js/dropdown', 'js/statuses', 'js/task', 'js/events'], funct
     }
 
     // Hide the status tags now, and in 500ms to be safe
-    task.hideStatusTags();
-    setTimeout(function() { task.hideStatusTags(); }, 500);
+    task.hideFolderTags(statuses.statuses);
+    setTimeout(function() { task.hideFolderTags(statuses.statuses); }, 500);
   };
 
   // Task updated
