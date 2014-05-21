@@ -6,9 +6,8 @@ function initialize() {
     require('js/events');
     require('js/task');
     require('js/dropdown');
+    require('js/menu_client');
     require('js/menu_status');
-//['js/statuses', 'js/debug', 'js/task', 'js/dropdown', 'js/menu_status', 'js/events']
-    //dropdown.createDropdown('client-menu', [], 'Select a client tag');
     debug.info('Ready!');
   });
 }
