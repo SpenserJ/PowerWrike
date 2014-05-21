@@ -1,0 +1,4 @@
+define({
+  folderDropdowns: [],
+  statusFolder: '/Statuses',
+});

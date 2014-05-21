@@ -1,10 +1,13 @@
-var config = {
-  folderDropdowns: [],
-  statusFolder: '/Statuses',
-};
-
 function initialize() {
-  requirejs(['js/statuses', 'js/debug', 'js/task', 'js/dropdown', 'js/menu_status', 'js/events'], function (statuses, debug, task, dropdown, menu_status, events) {
+  //requirejs(['js/statuses', 'js/debug', 'js/task', 'js/dropdown', 'js/menu_status', 'js/events'], function (statuses, debug, task, dropdown, menu_status, events) {
+  requirejs(function (require) {
+    require('js/statuses');
+    require('js/debug');
+    require('js/events');
+    require('js/task');
+    require('js/dropdown');
+    require('js/menu_status');
+//['js/statuses', 'js/debug', 'js/task', 'js/dropdown', 'js/menu_status', 'js/events']
     //dropdown.createDropdown('client-menu', [], 'Select a client tag');
     debug.info('Ready!');
   });
