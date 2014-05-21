@@ -1,4 +1,4 @@
-define(['js/debug', 'js/dropdown', 'js/statuses', 'js/task'], function (debug, dropdown, statuses, task) {
+define(['js/debug', 'js/dropdown', 'js/statuses', 'js/task', 'js/events'], function (debug, dropdown, statuses, task, events) {
   var items = []
     , currentTask = task.getCurrentTask()
     , menu;
@@ -16,21 +16,7 @@ define(['js/debug', 'js/dropdown', 'js/statuses', 'js/task'], function (debug, d
     task.changeTaskStatus(currentTask, statuses.statuses[$item.text().trim()]);
   }
 
-  function getActiveStatus() {
-    var currentTask = task.getCurrentTask()
-      , activeStatus = { name: 'Select a status', color: 'no-color' };
-    if (currentTask !== false) {
-      $.each(currentTask.data.parentFolders, function (i, id) {
-        if (typeof statuses.statusesById[id] !== 'undefined') {
-          var status = statuses.statusesById[id];
-          activeStatus = { name: status.wrikeHarder.uniquePath, color: status.wrikeHarder.colorClass };
-        }
-      });
-    }
-    return activeStatus;
-  }
-
-  menu = dropdown.createDropdown('status', items, getActiveStatus(), menuItemClicked);
+  menu = dropdown.createDropdown('status', items, task.getActiveStatus(true), menuItemClicked);
 
   var delayUpdateStatusDropdown = function delayUpdateStatusDropdown(record) {
     setTimeout(function() { shouldUpdateStatusDropdown(record); }, 0);
@@ -47,9 +33,9 @@ define(['js/debug', 'js/dropdown', 'js/statuses', 'js/task'], function (debug, d
 
     // Do we need to rerender the button, or can we just update the text?
     if ($.contains(document, menu.$button[0]) === true) {
-      menu.setActive(getActiveStatus());
+      menu.setActive(task.getActiveStatus(true));
     } else {
-      menu.renderButton(getActiveStatus());
+      menu.renderButton(task.getActiveStatus(true));
     }
 
     // Hide the status tags now, and in 500ms to be safe
@@ -58,12 +44,7 @@ define(['js/debug', 'js/dropdown', 'js/statuses', 'js/task'], function (debug, d
   };
 
   // Task updated
-  $wrike.bus.on('record.updated', delayUpdateStatusDropdown);
-  $wrike.bus.on('notifier.EventTaskChanged', delayUpdateStatusDropdown);
-
-  $wrike.bus.on('list.tasklist.task.selected', delayUpdateStatusDropdown);
-
-  // We need to delay just a touch so that the task can load first
-  $wrike.bus.on('overlay.shown', function () { setTimeout(shouldUpdateStatusDropdown, 0); });
+  events.addListener('task.updated', delayUpdateStatusDropdown);
+  events.addListener('task.selected', delayUpdateStatusDropdown);
   shouldUpdateStatusDropdown();
 });

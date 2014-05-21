@@ -67,13 +67,6 @@ define(['js/debug', 'js/statuses', 'js/task'], function (debug, statuses, task) 
 
     var $task = $('.wspace-task-view');
 
-    /*if (activeStatus == null) {
-      if (currentTask.data.id === currentTask.id) {
-        task.setDefaultTaskStatus(currentTask.data.id);
-      }
-      return;
-    }*/
-
     // Hide the Wrike Status selector
     $task.find('.ct-status').remove();
 

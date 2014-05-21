@@ -4,7 +4,7 @@ var config = {
 };
 
 function initialize() {
-  requirejs(['js/statuses', 'js/debug', 'js/task', 'js/dropdown', 'js/menu_status'], function (statuses, debug, task, dropdown, menu_status) {
+  requirejs(['js/statuses', 'js/debug', 'js/task', 'js/dropdown', 'js/menu_status', 'js/events'], function (statuses, debug, task, dropdown, menu_status, events) {
     //dropdown.createDropdown('client-menu', [], 'Select a client tag');
     debug.info('Ready!');
   });
