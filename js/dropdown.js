@@ -54,7 +54,7 @@ define(['js/debug', 'js/statuses', 'js/task'], function (debug, statuses, task) 
     $('body').append(self.$dropdown)
              .click(function(e) {
       var $target = $(e.target);
-      if ($target.parents('.ct-status').length === 0 && $target.parents('#' + self.properties.id).length === 0) {
+      if ($target.parents('#' + self.properties.id + '-button').length === 0 && $target.parents('#' + self.properties.id).length === 0) {
         if (self.$dropdown.css('visibility') !== 'hidden') {
           self.setVisibility(false);
         }
@@ -70,9 +70,12 @@ define(['js/debug', 'js/statuses', 'js/task'], function (debug, statuses, task) 
     // Hide the Wrike Status selector
     $task.find('.ct-status').remove();
 
+    // Remove our button if it already exists
+    $task.find('#' + self.properties.id + '-button').remove();
+
     /*jshint multistr: true */
     self.$button = $('\
-<div class="ct-status">\
+<div id="' + self.properties.id + '-button" style="float: left;">\
   <div class="wspace-task-settings-button x-btn-noicon">\
     <div class="wspace-task-tb-button-value"></div>\
   </div>\
