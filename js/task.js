@@ -29,34 +29,41 @@ define(['js/debug', 'js/statuses', 'js/events'], function (debug, statuses, ee) 
     }
   }
 
-  function changeTaskStatus(taskId, status) {
+  function changeFolderByGroup(taskId, folder, folderGroup, callbackOnChange) {
     $wrike.record.Task.load(taskId, function(rec) {
-      var statusId = status.id,
-          statusIds = Object.keys(statuses.statusesById),
-          statusChanged = false,
+      var folderId = folder.id,
+          folderIds = [],
+          folderChanged = false,
           initialParentFolders = rec.data.parentFolders,
           parentFolders;
 
+      folderIds = $.map(folderGroup, function (getId) { return getId.id; });
+
       parentFolders = $.grep(rec.data.parentFolders, function (value) {
-        return (value != statusId && $.inArray(value.toString(), statusIds) == -1);
+        return (value == folderId || $.inArray(value, folderIds) == -1);
       });
 
-      if (parentFolders.length !== rec.data.parentFolders.length) { statusChanged = true; }
+      if (parentFolders.length !== rec.data.parentFolders.length) { folderChanged = true; }
 
-      if ($.inArray(statusId, parentFolders) == -1) {
-        parentFolders.push(statusId);
-        statusChanged = true;
+      if ($.inArray(folderId, parentFolders) == -1) {
+        parentFolders.push(folderId);
+        folderChanged = true;
       }
 
+      if (folderChanged === true) {
+        rec.set('parentFolders', parentFolders);
+        if (typeof callbackOnChange === 'function') { callbackOnChange(rec); }
+        else { rec.save(null, rec.id); }
+      }
+    });
+  }
+
+  function changeTaskStatus(taskId, status) {
+    changeFolderByGroup(taskId, status, statuses.statuses, function (rec) {
       if (rec.data.state !== status.wrikeHarder.wrikeState) {
         rec.set('state', status.wrikeHarder.wrikeState);
-        statusChanged = true;
       }
-
-      if (statusChanged === true) {
-        rec.set('parentFolders', parentFolders);
-        rec.save(null, rec.id);
-      }
+      rec.save(null, rec.id);
     });
   }
 
@@ -94,6 +101,7 @@ define(['js/debug', 'js/statuses', 'js/events'], function (debug, statuses, ee) 
   return {
     getCurrentTask: getCurrentTask,
     getCurrentTaskId: getCurrentTaskId,
+    changeFolderByGroup: changeFolderByGroup,
     changeTaskStatus: changeTaskStatus,
     hideFolderTags: hideFolderTags,
     getActiveStatus: getActiveStatus,
