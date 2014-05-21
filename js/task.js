@@ -23,7 +23,8 @@ define(['js/debug', 'js/statuses', 'js/events'], function (debug, statuses, ee) 
       if (currentTask !== false && currentTask.data.id === currentTask.id) {
         var statusKeys = Object.keys(statuses.statuses)
           , status = statuses.statuses[statusKeys[0]];
-        changeTaskStatus(taskId, status);
+        debug.warn('Setting default status', currentTask, status);
+        changeTaskStatus(currentTask.id, status);
       }
     }
   }
@@ -87,6 +88,7 @@ define(['js/debug', 'js/statuses', 'js/events'], function (debug, statuses, ee) 
   }
 
   ee.addListener('task.selected', setDefaultTaskStatus);
+  setDefaultTaskStatus();
 
   return {
     getCurrentTask: getCurrentTask,

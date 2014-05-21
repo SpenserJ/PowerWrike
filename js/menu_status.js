@@ -18,13 +18,11 @@ define(['js/debug', 'js/dropdown', 'js/statuses', 'js/task', 'js/events'], funct
 
   menu = dropdown.createDropdown('status', items, task.getActiveStatus(true), menuItemClicked);
 
-  var delayUpdateStatusDropdown = function delayUpdateStatusDropdown(record) {
-    setTimeout(function() { shouldUpdateStatusDropdown(record); }, 0);
-  };
-
   var shouldUpdateStatusDropdown = function shouldUpdateStatusDropdown(record) {
     var currentTask = task.getCurrentTask();
     if (currentTask === false || (typeof record !== 'undefined' && currentTask.id !== record.id)) { return; }
+
+    if (typeof record !== 'undefined') { currentTask = record; }
 
     // If we have a current task, but it isn't fully loaded, try again in 100ms
     if (typeof currentTask.data === 'undefined' || typeof currentTask.data.parentFolders === 'undefined') {
@@ -44,7 +42,7 @@ define(['js/debug', 'js/dropdown', 'js/statuses', 'js/task', 'js/events'], funct
   };
 
   // Task updated
-  events.addListener('task.updated', delayUpdateStatusDropdown);
-  events.addListener('task.selected', delayUpdateStatusDropdown);
+  events.addListener('task.changed', shouldUpdateStatusDropdown);
+  events.addListener('task.selected', shouldUpdateStatusDropdown);
   shouldUpdateStatusDropdown();
 });
