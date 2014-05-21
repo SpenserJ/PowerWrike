@@ -77,22 +77,35 @@ define(['js/debug', 'js/statuses', 'js/events'], function (debug, statuses, ee) 
     }).hide();
   }
 
-  function getActiveStatus(provideDefault) {
-    var currentTask = getCurrentTask()
-      , activeStatus = null;
+  function getActiveFolder(currentTask, folders, defaultValue) {
+    var activeFolder = null
+      , foldersById = {}
+      , folderIds = [];
+
+    $.each(folders, function (name, folder) {
+      foldersById[folder.id] = folder;
+      folderIds.push(folder.id.toString());
+    });
+
     if (currentTask !== false) {
-      $.each(currentTask.data.parentFolders, function (i, id) {
-        if (typeof statuses.statusesById[id] !== 'undefined') {
-          var status = statuses.statusesById[id];
-          activeStatus = { name: status.wrikeHarder.uniquePath, color: status.wrikeHarder.colorClass };
-        }
+      var matches = $.grep(currentTask.data.parentFolders, function (val) {
+        return ($.inArray(val.toString(), folderIds) !== -1);
       });
+      if (matches.length !== 0) {
+        var folder = foldersById[matches[0]];
+        activeFolder = { name: folder.data.title, color: folder.wrikeHarder.colorClass, folder: folder };
+      }
     }
     // If there isn't a status selected, should we return a default placeholder?
-    if (provideDefault === true && activeStatus === null) {
-      activeStatus = { name: 'Select a status', color: 'no-color' };
+    if (typeof defaultValue === 'string' && activeFolder === null) {
+      activeFolder = { name: defaultValue, color: 'no-color', folder: null };
     }
-    return activeStatus;
+    return activeFolder;
+  }
+
+  function getActiveStatus() {
+    var currentTask = getCurrentTask();
+    return getActiveFolder(currentTask, statuses.statuses, 'Select a status');
   }
 
   ee.addListener('task.selected', setDefaultTaskStatus);
@@ -104,6 +117,7 @@ define(['js/debug', 'js/statuses', 'js/events'], function (debug, statuses, ee) 
     changeFolderByGroup: changeFolderByGroup,
     changeTaskStatus: changeTaskStatus,
     hideFolderTags: hideFolderTags,
+    getActiveFolder: getActiveFolder,
     getActiveStatus: getActiveStatus,
   };
 });
