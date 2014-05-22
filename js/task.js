@@ -60,8 +60,8 @@ define(['js/debug', 'js/statuses', 'js/events'], function (debug, statuses, ee) 
 
   function changeTaskStatus(taskId, status) {
     changeFolderByGroup(taskId, status, statuses.statuses, function (rec) {
-      if (rec.data.state !== status.wrikeHarder.wrikeState) {
-        rec.set('state', status.wrikeHarder.wrikeState);
+      if (rec.data.state !== status.powerWrike.wrikeState) {
+        rec.set('state', status.powerWrike.wrikeState);
       }
       rec.save(null, rec.id);
     });
@@ -69,7 +69,7 @@ define(['js/debug', 'js/statuses', 'js/events'], function (debug, statuses, ee) 
 
   function hideFolderTags(folderGroup) {
     var $task = $('.wspace-task-view')
-      , folderNames = $.map(folderGroup, function (folder) { return folder.wrikeHarder.uniquePath; });
+      , folderNames = $.map(folderGroup, function (folder) { return folder.powerWrike.uniquePath; });
 
     // Hide the matching folder tags
     $task.find('.wspace-task-widgets-tags .wspace-tag-simple').filter(function() {
@@ -93,7 +93,7 @@ define(['js/debug', 'js/statuses', 'js/events'], function (debug, statuses, ee) 
       });
       if (matches.length !== 0) {
         var folder = foldersById[matches[0]];
-        activeFolder = { name: folder.data.title, color: folder.wrikeHarder.colorClass, folder: folder };
+        activeFolder = { name: folder.data.title, color: folder.powerWrike.colorClass, folder: folder };
       }
     }
     // If there isn't a status selected, should we return a default placeholder?

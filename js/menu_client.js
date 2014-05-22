@@ -9,7 +9,7 @@ define(['js/debug', 'js/dropdown', 'js/folders', 'js/task', 'js/events'], functi
     clients[clientFolder.data.title] = clientFolder;
     items.push({
       name: clientFolder.data.title,
-      color: clientFolder.wrikeHarder.colorClass,
+      color: clientFolder.powerWrike.colorClass,
     });
   });
 

@@ -7,7 +7,7 @@ define(function () {
     var folders = $w.folders.getChildren(parentFolder);
 
     $.each(folders, function (i, val) {
-      val.wrikeHarder = {
+      val.powerWrike = {
         uniquePath: $w.folders.getUniquePath(val),
         colorClass: 'no-color',
       };
@@ -15,7 +15,7 @@ define(function () {
       if (val.data.metaData !== null) {
         var metadata = $.parseJSON(val.data.metaData);
         if (typeof metadata.iconCls !== 'undefined') {
-          val.wrikeHarder.colorClass = metadata.iconCls.replace('w3-custom-node-', '');
+          val.powerWrike.colorClass = metadata.iconCls.replace('w3-custom-node-', '');
         }
       }
     });

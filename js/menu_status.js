@@ -6,7 +6,7 @@ define(['js/debug', 'js/dropdown', 'js/statuses', 'js/task', 'js/events'], funct
   $.each(statuses.statuses, function (statusName, status) {
     items.push({
       name: statusName,
-      color: status.wrikeHarder.colorClass,
+      color: status.powerWrike.colorClass,
     });
   });
 

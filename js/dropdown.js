@@ -13,7 +13,7 @@ define(['js/debug', 'js/statuses', 'js/task'], function (debug, statuses, task) 
     self.$button = null;
 
     self.properties = {
-      id: 'wrikeharder-dropdown-' + self.name.replace(/[^a-zA-Z0-9_\-]/g, '_'),
+      id: 'powerwrike-dropdown-' + self.name.replace(/[^a-zA-Z0-9_\-]/g, '_'),
     };
 
     debug.info('Initializing dropdown "' + self.name + '"');

@@ -1,7 +1,7 @@
 {
-  "name": "Wrike Harder",
+  "name": "PowerWrike",
   "description": "Add additional features to Wrike",
-  "version": "0.1",
+  "version": "0.2",
   "content_scripts": [
     {
       "matches": ["https://www.wrike.com/*"],
@@ -12,6 +12,7 @@
     "js/*",
     "lib/*",
     "wrikeharder.js",
+    "powerwrike.js",
     "config.js"
   ],
   "manifest_version": 2
