@@ -5,6 +5,9 @@ define(['js/debug', 'js/dropdown', 'js/folders', 'js/task', 'js/events'], functi
     , departmentFolders = folders.getSubfolders('/__SS_Departments')
     , departments = {};
 
+  // If we couldn't load the department folder, don't build the menu
+  if (departmentFolders === false) { return; }
+
   $.each(departmentFolders, function (i, departmentFolder) {
     departments[departmentFolder.data.title] = departmentFolder;
     items.push({

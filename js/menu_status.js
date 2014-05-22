@@ -10,6 +10,9 @@ define(['js/debug', 'js/dropdown', 'js/statuses', 'js/task', 'js/events'], funct
     });
   });
 
+  // If there aren't any statuses loaded, don't build the menu
+  if (items.length === 0) { return; }
+
   function menuItemClicked($item) {
     var currentTask = task.getCurrentTaskId();
     if (currentTask === false) { return; }

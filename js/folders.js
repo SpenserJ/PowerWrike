@@ -4,6 +4,8 @@ define(function () {
       return test.data.titlePath === path;
     }, null, null);
     var parentFolder = $w.folders.getAt(parentFolderId);
+    if (typeof parentFolder === 'undefined') { return false; }
+
     var folders = $w.folders.getChildren(parentFolder);
 
     $.each(folders, function (i, val) {

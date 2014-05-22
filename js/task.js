@@ -87,7 +87,7 @@ define(['js/debug', 'js/statuses', 'js/events'], function (debug, statuses, ee) 
       folderIds.push(folder.id.toString());
     });
 
-    if (currentTask !== false) {
+    if (currentTask !== false && typeof currentTask.data.parentFolders !== 'undefined') {
       var matches = $.grep(currentTask.data.parentFolders, function (val) {
         return ($.inArray(val.toString(), folderIds) !== -1);
       });

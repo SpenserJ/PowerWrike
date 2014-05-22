@@ -5,6 +5,9 @@ define(['js/debug', 'js/dropdown', 'js/folders', 'js/task', 'js/events'], functi
     , clientFolders = folders.getSubfolders('/__SS_Client Tags')
     , clients = {};
 
+  // If we couldn't load the client folder, don't build the menu
+  if (clientFolders === false) { return; }
+
   $.each(clientFolders, function (i, clientFolder) {
     clients[clientFolder.data.title] = clientFolder;
     items.push({
