@@ -1,5 +1,6 @@
-define(['js/debug', 'js/statuses', 'js/task'], function (debug, statuses, task) {
-  var dropdowns = {};
+define(['js/debug', 'js/statuses', 'js/task', 'js/styles'], function (debug, statuses, task, styles) {
+  var dropdowns = {}
+    , stylesLoaded = false;
 
   var Dropdown = function Dropdown(name, items, active, menuItemClicked) {
     var self = this;
@@ -30,13 +31,13 @@ define(['js/debug', 'js/statuses', 'js/task'], function (debug, statuses, task) 
     // Remove the dropdown if it already exists
     if (self.$dropdown !== null) { self.$dropdown.remove(); }
 
-    self.$dropdown = $('<div id="' + self.properties.id + '" class="x-menu x-menu-floating x-layer wspace-task-widgets-status-menu w4-shadow-frame w4-animation-fadein" style="position: absolute; z-index: 15000; visibility: hidden; left: -10000px; top: -10000px;"><a class="x-menu-focus" href="#" onclick="return false;" tabindex="-1"></a><ul class="x-menu-list"></ul></div>');
+    self.$dropdown = $('<div id="' + self.properties.id + '" class="powerwrike-dropdown x-menu x-menu-floating x-layer wspace-task-widgets-status-menu w4-shadow-frame w4-animation-fadein" style="position: absolute; z-index: 15000; visibility: hidden; left: -10000px; top: -10000px;"><a class="x-menu-focus" href="#" onclick="return false;" tabindex="-1"></a><ul class="x-menu-list"></ul></div>');
 
     $.each(self.items, function (index, itemDetails) {
       /*jshint multistr: true */
       var $item = $('\
 <li class="x-menu-list-item">\
-<a class="x-menu-item status-icon-0" hidefocus="true" unselectable="on" href="#" style="padding-left: 26px;">\
+<a class="x-menu-item status-icon-0" hidefocus="true" unselectable="on" href="#">\
   <div class="wspace-tag-simple wspace-tag-' + itemDetails.color + '">' + itemDetails.name + '</div>\
 </a>\
 </li>\
@@ -75,7 +76,7 @@ define(['js/debug', 'js/statuses', 'js/task'], function (debug, statuses, task) 
 
     /*jshint multistr: true */
     self.$button = $('\
-<div id="' + self.properties.id + '-button" style="float: left;">\
+<div class="powerwrike-dropdown-button" id="' + self.properties.id + '-button" style="float: left;">\
   <div class="wspace-task-settings-button x-btn-noicon">\
     <div class="wspace-task-tb-button-value"></div>\
   </div>\
@@ -114,6 +115,16 @@ define(['js/debug', 'js/statuses', 'js/task'], function (debug, statuses, task) 
   };
 
   function createDropdown(name, items, active, menuItemClicked) {
+    if (stylesLoaded === false) {
+      stylesLoaded = true;
+      styles.addStyle('dropdown',
+'.powerwrike-dropdown-button .wspace-task-settings-button { padding: 0 5px; line-height: 54px; }' +
+'.w4-task-statebar { padding-left: 21px; }' +
+'.powerwrike-dropdown-button .wspace-tag-simple { margin-right: 0; }' +
+'.powerwrike-dropdown .x-menu-list { padding: 0; }' +
+'.powerwrike-dropdown a.x-menu-item { padding: 5px; }'
+      );
+    }
     return (dropdowns[name] = new Dropdown(name, items, active, menuItemClicked));
   }
 
