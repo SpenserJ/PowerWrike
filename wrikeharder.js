@@ -1,11 +1,11 @@
 function initialize() {
-  //requirejs(['js/statuses', 'js/debug', 'js/task', 'js/dropdown', 'js/menu_status', 'js/events'], function (statuses, debug, task, dropdown, menu_status, events) {
   requirejs(function (require) {
     require('js/statuses');
     require('js/debug');
     require('js/events');
     require('js/task');
     require('js/dropdown');
+    require('js/menu_department');
     require('js/menu_client');
     require('js/menu_status');
     debug.info('Ready!');

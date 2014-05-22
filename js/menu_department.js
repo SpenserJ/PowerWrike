@@ -2,25 +2,25 @@ define(['js/debug', 'js/dropdown', 'js/folders', 'js/task', 'js/events'], functi
   var items = []
     , currentTask = task.getCurrentTask()
     , menu
-    , clientFolders = folders.getSubfolders('/__SS_Client Tags')
-    , clients = {};
+    , departmentFolders = folders.getSubfolders('/__SS_Departments')
+    , departments = {};
 
-  $.each(clientFolders, function (i, clientFolder) {
-    clients[clientFolder.data.title] = clientFolder;
+  $.each(departmentFolders, function (i, departmentFolder) {
+    departments[departmentFolder.data.title] = departmentFolder;
     items.push({
-      name: clientFolder.data.title,
-      color: clientFolder.wrikeHarder.colorClass,
+      name: departmentFolder.data.title,
+      color: departmentFolder.wrikeHarder.colorClass,
     });
   });
 
   function menuItemClicked($item) {
     var currentTask = task.getCurrentTaskId();
     if (currentTask === false) { return; }
-    task.changeFolderByGroup(currentTask, clients[$item.text().trim()], clients);
+    task.changeFolderByGroup(currentTask, departments[$item.text().trim()], departments);
   }
 
-  var activeFolder = task.getActiveFolder(currentTask, clients, 'Please select a client tag');
-  menu = dropdown.createDropdown('client', items, activeFolder, menuItemClicked);
+  var activeFolder = task.getActiveFolder(currentTask, departments, 'Please select a department tag');
+  menu = dropdown.createDropdown('department', items, activeFolder, menuItemClicked);
 
   var shouldUpdateStatusDropdown = function shouldUpdateStatusDropdown(record) {
     var currentTask = task.getCurrentTask();
@@ -34,7 +34,7 @@ define(['js/debug', 'js/dropdown', 'js/folders', 'js/task', 'js/events'], functi
     }
 
     // Do we need to rerender the button, or can we just update the text?
-    var activeFolder = task.getActiveFolder(currentTask, clients, 'Please select a client tag');
+    var activeFolder = task.getActiveFolder(currentTask, departments, 'Please select a department tag');
     if ($.contains(document, menu.$button[0]) === true) {
       menu.setActive(activeFolder);
     } else {
@@ -42,8 +42,8 @@ define(['js/debug', 'js/dropdown', 'js/folders', 'js/task', 'js/events'], functi
     }
 
     // Hide the folder tags now, and in 500ms to be safe
-    task.hideFolderTags(clients);
-    setTimeout(function() { task.hideFolderTags(clients); }, 500);
+    task.hideFolderTags(departments);
+    setTimeout(function() { task.hideFolderTags(departments); }, 500);
   };
 
   // Task updated
