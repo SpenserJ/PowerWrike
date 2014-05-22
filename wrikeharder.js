@@ -8,6 +8,7 @@ function initialize() {
     require('js/menu_department');
     require('js/menu_client');
     require('js/menu_status');
+    require('js/mentions');
     debug.info('Ready!');
   });
 }
