@@ -1,6 +1,9 @@
 define(function () {
   function emit(logType, args) {
-    console[logType].apply(console, ['PowerWrike:'].concat([].splice.call(args, 0)));
+    // Grab as many arguments as possible
+    var argsArray = [].splice.call(args, 0, 9999)
+      , message = ['PowerWrike:'].concat(argsArray);
+    console[logType].apply(console, message);
   }
 
   return {
