@@ -23,9 +23,11 @@ define(['js/debug', 'js/dropdown', 'js/statuses', 'js/task', 'js/events'], funct
 
   var shouldUpdateStatusDropdown = function shouldUpdateStatusDropdown(record) {
     var currentTask = task.getCurrentTask();
+    // Return if we're not focused on a task, or are getting an update for a different task
     if (currentTask === false || (typeof record !== 'undefined' && currentTask.id !== record.id)) { return; }
 
-    if (typeof record !== 'undefined') { currentTask = record; }
+    // If we're using an updated record, ensure the data property is set
+    if (typeof record !== 'undefined') { currentTask = record; currentTask.data = record; }
 
     // If we have a current task, but it isn't fully loaded, try again in 100ms
     if (typeof currentTask.data === 'undefined' || typeof currentTask.data.parentFolders === 'undefined') {

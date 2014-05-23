@@ -3,7 +3,7 @@ define(['js/debug', 'lib/EventEmitter'], function (debug, EventEmitter) {
 
   function taskChanged(task) {
     debug.debug('Task Changed', task);
-    ee.emitEvent('task.changed', task);
+    ee.emitEvent('task.changed', [task]);
   }
 
   $wrike.bus.on('record.updated', taskChanged);
