@@ -125,10 +125,10 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
 
   function renderMentions() {
     var $mentionsContainer = $mentionsPanel.find('.stream-view-template-target').empty()
-      , $mention
+      , $lastMention
       , lastMention;
 
-    $(mentions).each(function (i, mention) {
+    $(mentions).each(function (mentionIndex, mention) {
       var data = {
         commentAuthor: $wrike.user(mention.comment.entryUid).data(),
         taskAuthor: $wrike.user(mention.task.uid).data(),
@@ -146,11 +146,11 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
 
       // If this is the same task as the last one, group the comments together
       if (typeof lastMention !== 'undefined' && lastMention.task.id === mention.task.id) {
-        $mention.find('.comments').append(renderComment(mention.comment, data));
+        $lastMention.find('.comments').append(renderComment(mention.comment, data));
         return;
       }
 
-      $mention = $(/*jshint multistr: true */ '\
+      var $mention = $(/*jshint multistr: true */ '\
 <div class="stream-entry stream-task-entry' + ((mention.comment.isRead === false) ? ' unread' : '') + '">\
   <div class="body body-root">\
     <div class="visual">\
@@ -184,7 +184,7 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
       ');
 
       var folders = [];
-      $(mention.task.parentFolders).each(function (i, folderId) {
+      $(mention.task.parentFolders).each(function (folderIndex, folderId) {
         var folder = $w.folders.getById(folderId);
 
         // Skip any folders that we don't have access to
@@ -205,10 +205,13 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
         // Exclude targets that are already clickable
         if ($target.is('.stream-user-id, .x-user-avatar, .folder-link') === false) {
           $wrike.bus.fireEvent('overlay.task.selected', mention.task.id);
+          mentions[mentionIndex].comment.isRead = true;
+          $mention.removeClass('unread');
         }
       });
 
       $mentionsContainer.append($mention);
+      $lastMention = $mention;
       lastMention = mention;
     });
 
