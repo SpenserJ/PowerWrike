@@ -103,8 +103,8 @@ define(['js/debug', 'js/statuses', 'js/events'], function (debug, statuses, ee) 
     return activeFolder;
   }
 
-  function getActiveStatus() {
-    var currentTask = getCurrentTask();
+  function getActiveStatus(currentTask) {
+    if (typeof currentTask === 'undefined') { currentTask = getCurrentTask(); }
     return getActiveFolder(currentTask, statuses.statuses, 'Select a status');
   }
 

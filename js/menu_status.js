@@ -19,7 +19,7 @@ define(['js/debug', 'js/dropdown', 'js/statuses', 'js/task', 'js/events'], funct
     task.changeTaskStatus(currentTask, statuses.statuses[$item.text().trim()]);
   }
 
-  menu = dropdown.createDropdown('status', items, task.getActiveStatus(true), menuItemClicked);
+  menu = dropdown.createDropdown('status', items, task.getActiveStatus(), menuItemClicked);
 
   var shouldUpdateStatusDropdown = function shouldUpdateStatusDropdown(record) {
     var currentTask = task.getCurrentTask();
@@ -34,9 +34,9 @@ define(['js/debug', 'js/dropdown', 'js/statuses', 'js/task', 'js/events'], funct
 
     // Do we need to rerender the button, or can we just update the text?
     if ($.contains(document, menu.$button[0]) === true) {
-      menu.setActive(task.getActiveStatus(true));
+      menu.setActive(task.getActiveStatus(currentTask));
     } else {
-      menu.renderButton(task.getActiveStatus(true));
+      menu.renderButton(task.getActiveStatus(currentTask));
     }
 
     // Hide the status tags now, and in 500ms to be safe
