@@ -1,7 +1,7 @@
 {
   "name": "PowerWrike",
   "description": "Add additional features to Wrike",
-  "version": "0.2",
+  "version": "0.3",
   "content_scripts": [
     {
       "matches": ["https://www.wrike.com/*"],
