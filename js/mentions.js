@@ -107,15 +107,13 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
 
   function renderPanel() {
     $mentionsPanel = $(/*jshint multistr: true */ '\
-<div id="powerwrike-mentions-list" class="x-panel wspace-dashboard-card wrike-size-small x-portlet" style="margin-bottom: 0; top: 45px; position: fixed; bottom: 27px; right: 9px; width: 512px;">\
-  <div class="x-panel-header x-unselectable wrike-panel-header" style="cursor: move;">\
+<div id="powerwrike-mentions-list" class="x-panel wspace-dashboard-card wrike-size-small x-portlet">\
+  <div class="x-panel-header x-unselectable wrike-panel-header">\
     <span class="wrike-panel-title">Mentions</span>\
   </div>\
-  <div style="overflow: auto; position: absolute; bottom: 0; top: 39px;">\
-    <div class="x-panel-body">\
-      <div class="stream-panel stream-panel-wide">\
-        <div class="stream-view-template-target"></div>\
-      </div>\
+  <div class="x-panel-body">\
+    <div class="stream-panel stream-panel-wide">\
+      <div class="stream-view-template-target"></div>\
     </div>\
   </div>\
 </div>\
@@ -255,7 +253,7 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
           '<div class="count' + ((mentionsCount.unread === 0) ? ' hidden' : '') + '">' + mentionsCount.unread + '</div>';
     if (typeof $mentionsDropdown === 'undefined') {
       $mentionsDropdown = $(/*jshint multistr: true */ '\
-<span class="wspace_header_mentions wspace_header_userLink hasmenu x-btn-noicon" style="width: auto;">\
+<span class="wspace_header_mentions wspace_header_userLink hasmenu x-btn-noicon">\
   <span class="mentions">' + mentionsHtml + '</span>\
 </span>\
       ');
@@ -289,7 +287,10 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
       margin-left: 8px;\
     }\
     .wspace_header_mentions .count.hidden { display: none; }\
+    #powerwrike-mentions-list { margin-bottom: 0; top: 45px; position: fixed; bottom: 27px; right: 9px; width: 512px; }\
+    #powerwrike-mentions-list .x-panel-body { overflow: auto; position: absolute; bottom: 0; top: 39px; }\
     #powerwrike-mentions-list .stream-task-entry.unread { background: cornsilk; }\
+    #powerwrike-mentions-list .stream-task-entry .comment-wrap { margin-right: 20px; word-break: break-word; }\
   ');
 
   renderPanel();
