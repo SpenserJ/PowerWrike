@@ -75,8 +75,6 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
           var task = streamUpdate;
           delete task.agentries;
           yourMentions.push({ task: task, comment: comment });
-          mentionsCount.total++;
-          if (comment.isRead !== true) { mentionsCount.unread++; }
         }
       });
     });
@@ -204,8 +202,13 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
         // Exclude targets that are already clickable
         if ($target.is('.stream-user-id, .x-user-avatar, .folder-link') === false) {
           $wrike.bus.fireEvent('overlay.task.selected', mention.task.id);
-          mentions[mentionIndex].comment.isRead = true;
+          $(mentions).each(function (mentionReadIndex, mentionRead) {
+            if (mention.task.id === mentionRead.task.id) {
+              mentionRead.comment.isRead = true;
+            }
+          });
           $mention.removeClass('unread');
+          renderMentionsDropdown();
         }
       });
 
@@ -250,6 +253,8 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
   }
 
   function renderMentionsDropdown() {
+    recountMentions();
+
     var mentionsHtml = 'Mentions (' + mentionsCount.total + ') ' + 
           '<div class="count' + ((mentionsCount.unread === 0) ? ' hidden' : '') + '">' + mentionsCount.unread + '</div>';
     if (typeof $mentionsDropdown === 'undefined') {
@@ -272,7 +277,6 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
         wrikeCenterViewport.setWidth($(document).width() - left - wrikeCenterViewport.margins.right);
 
         // Update the mentions button
-        mentionsCount.unread = 0;
         renderMentionsDropdown();
       });
 
@@ -280,6 +284,14 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
     } else {
       $mentionsDropdown.find('.mentions').html(mentionsHtml);
     }
+  }
+
+  function recountMentions() {
+    var unread = 0;
+    $(mentions).each(function (i, mention) {
+      if (mention.comment.isRead === false) { unread++; }
+    });
+    mentionsCount = { total: mentions.length, unread: unread };
   }
 
   styles.addStyle('mentions', /*jshint multistr: true */ '\
