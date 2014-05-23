@@ -190,9 +190,14 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
         // Skip any folders that we don't have access to
         if (typeof folder === 'undefined') { return; }
 
-        folders.push('<a rel="folder' + folder.id + '" ext:qmaxwidth="500" ext:qtip="folder:{id:' + folder.id + '}" ext:qparser="folder" ext:anchor="bottom" ext:qtooltip="true" class="title top-folder folder-link">' + folder.data.title + '</a>');
+        var $folderLink = $('<a rel="folder' + folder.id + '" ext:qmaxwidth="500" ext:qtip="folder:{id:' + folder.id + '}" ext:qparser="folder" ext:anchor="bottom" ext:qtooltip="true" class="title top-folder folder-link">' + folder.data.title + '</a>');
+
+        $folderLink.click(function() { $wspace.History.openFolder({ id: folder.id }); });
+        if (folders.length !== 0) { $folderLink.prepend(', '); }
+
+        folders.push($folderLink);
       });
-      $mention.find('.details .parent-folders').append(folders.join(', ')).append('<span class="sqb">]</span>');
+      $mention.find('.details .parent-folders').append(folders).append('<span class="sqb">]</span>');
       $mentionsContainer.append($mention);
       lastMention = mention;
     });
