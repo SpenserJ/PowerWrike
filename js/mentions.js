@@ -4,7 +4,8 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
     , $mentionsPanel
     , $mentionsDropdown
     , mentionsCount = { total: 0, unread: 0 }
-    , firstRun = true;
+    , firstRun = true
+    , wrikeCenterViewport = Ext.getCmp($('.viewport-center-center').attr('id'));
 
   function getStream() {
     var api = new Ext.data.HttpProxy({ url:'/ui/as_append3' });
@@ -259,7 +260,18 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
       ');
 
       $mentionsDropdown.click(function () {
+        var marginSize = $mentionsPanel.is(':visible') ? 9 : (512 + 18)
+          , left = wrikeCenterViewport.getPosition()[0];
+
+        // Toggle our mentions panel
         $mentionsPanel.toggle();
+        $mentionsDropdown.toggleClass('expanded');
+
+        // Resize the Wrike viewport
+        wrikeCenterViewport.margins.right = marginSize;
+        wrikeCenterViewport.setWidth($(document).width() - left - wrikeCenterViewport.margins.right);
+
+        // Update the mentions button
         mentionsCount.unread = 0;
         renderMentionsDropdown();
       });
@@ -287,6 +299,18 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
       margin-left: 8px;\
     }\
     .wspace_header_mentions .count.hidden { display: none; }\
+    .wspace_header_mentions {\
+      margin-bottom: -9px;\
+      padding: 0 9px 9px;\
+    }\
+    .wspace_header_mentions.expanded {\
+      background: #fff;\
+      border-radius: 4px 4px 0 0;\
+      -webkit-font-smoothing: antialiased;\
+      color: #242424;\
+      text-shadow: none;\
+    }\
+    \
     #powerwrike-mentions-list { margin-bottom: 0; top: 45px; position: fixed; bottom: 27px; right: 9px; width: 512px; }\
     #powerwrike-mentions-list .x-panel-body { overflow: auto; position: absolute; bottom: 0; top: 39px; }\
     #powerwrike-mentions-list .stream-task-entry.unread { background: cornsilk; }\
