@@ -107,9 +107,9 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
 
   function renderPanel() {
     $mentionsPanel = $(/*jshint multistr: true */ '\
-<div class="x-panel wspace-dashboard-card wrike-size-small x-portlet" style="margin-bottom: 0; top: 45px; position: fixed; bottom: 27px; right: 9px; width: 512px;">\
+<div id="powerwrike-mentions-list" class="x-panel wspace-dashboard-card wrike-size-small x-portlet" style="margin-bottom: 0; top: 45px; position: fixed; bottom: 27px; right: 9px; width: 512px;">\
   <div class="x-panel-header x-unselectable wrike-panel-header" style="cursor: move;">\
-    <span class="wrike-panel-title">Mentions - Can\'t click links yet. Find the task yourself!</span>\
+    <span class="wrike-panel-title">Mentions</span>\
   </div>\
   <div style="overflow: auto; position: absolute; bottom: 0; top: 39px;">\
     <div class="x-panel-body">\
@@ -198,9 +198,18 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
         folders.push($folderLink);
       });
       $mention.find('.details .parent-folders').append(folders).append('<span class="sqb">]</span>');
+
+      // Make the entire task item launch the overlay when clicked
+      $mention.click(function() {
+        $wrike.bus.fireEvent('overlay.task.selected', mention.task.id);
+      });
+
       $mentionsContainer.append($mention);
       lastMention = mention;
     });
+
+    // Make all usernames clickable
+    $wrike.contact.AvatarFactory.xAddOnClickListener(Ext.fly('powerwrike-mentions-list'), ["stream-user-id", "x-user-avatar"]);
 
     renderMentionsDropdown();
   }
