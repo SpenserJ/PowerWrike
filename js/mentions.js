@@ -151,7 +151,7 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
       }
 
       $mention = $(/*jshint multistr: true */ '\
-<div class="stream-entry stream-task-entry">\
+<div class="stream-entry stream-task-entry' + ((mention.comment.isRead === false) ? ' unread' : '') + '">\
   <div class="body body-root">\
     <div class="visual">\
       <div class="task-photo author-photo">\
@@ -200,8 +200,12 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
       $mention.find('.details .parent-folders').append(folders).append('<span class="sqb">]</span>');
 
       // Make the entire task item launch the overlay when clicked
-      $mention.click(function() {
-        $wrike.bus.fireEvent('overlay.task.selected', mention.task.id);
+      $mention.find('.body').click(function(e) {
+        var $target = $(e.target);
+        // Exclude targets that are already clickable
+        if ($target.is('.stream-user-id, .x-user-avatar, .folder-link') === false) {
+          $wrike.bus.fireEvent('overlay.task.selected', mention.task.id);
+        }
       });
 
       $mentionsContainer.append($mention);
@@ -282,6 +286,7 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
       margin-left: 8px;\
     }\
     .wspace_header_mentions .count.hidden { display: none; }\
+    #powerwrike-mentions-list .stream-task-entry.unread { background: cornsilk; }\
   ');
 
   renderPanel();
