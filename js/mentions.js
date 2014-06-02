@@ -71,6 +71,9 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
           // Skip comments that we've already processed
           if ($.inArray(comment.id, processedMentions) !== -1) { return; }
 
+          // Ensure that we mark comments as read, if the parent task says there aren't any unread
+          if (streamUpdate.numUnreadEntries === 0) { comment.isRead = true; }
+
           processedMentions.push(comment.id);
           var task = streamUpdate;
           delete task.agentries;
@@ -312,8 +315,8 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
     }\
     .wspace_header_mentions .count.hidden { display: none; }\
     .wspace_header_mentions {\
-      margin-bottom: -9px;\
-      padding: 0 9px 9px;\
+      margin-bottom: -11px;\
+      padding: 0 9px 11px;\
     }\
     .wspace_header_mentions.expanded {\
       background: #fff;\
