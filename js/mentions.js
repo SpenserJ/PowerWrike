@@ -4,6 +4,7 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
     , $mentionsPanel
     , $mentionsDropdown
     , mentionsCount = { total: 0, unread: 0 }
+    , unreadOnly = true
     , firstRun = true
     , wrikeCenterViewport = Ext.getCmp($('.viewport-center-center').attr('id'));
 
@@ -111,7 +112,9 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
     $mentionsPanel = $(/*jshint multistr: true */ '\
 <div id="powerwrike-mentions-list" class="x-panel wspace-dashboard-card wrike-size-small x-portlet">\
   <div class="x-panel-header x-unselectable wrike-panel-header">\
-    <span class="wrike-panel-title">Mentions</span>\
+  <span class="wrike-panel-title">\
+    Mentions\
+  </span>\
   </div>\
   <div class="x-panel-body">\
     <div class="stream-panel stream-panel-wide">\
@@ -120,6 +123,30 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
   </div>\
 </div>\
     ').hide();
+
+    $onlyUnread = $(/*jshint multistr: true */ '\
+<div class="unread-toggle" style="">\
+  <span class="wspace-button-more x-btn-noicon black-tooltip" rel="Only show unread">\
+    <div class="wrike-button-checkbox w2-filter-tb-checkall-checked">&nbsp;</div>\
+    <span class="text">Unread only</span>\
+  </span>\
+</div>\
+    ')
+    .click(function() {
+      var $checkbox = ($(this).hasClass('wrike-button-checkbox') === true) ? $(this) : $(this).find('.wrike-button-checkbox')
+        , $button = $(this).hasClass('unread-toggle') ? $(this) : $(this).closest('.unread-toggle');
+      unreadOnly = !unreadOnly;
+      if (unreadOnly === true) {
+        $checkbox.addClass('w2-filter-tb-checkall-checked');
+      } else {
+        $checkbox.removeClass('w2-filter-tb-checkall-checked');
+      }
+      renderMentions();
+    });
+    $onlyUnread.find('.wspace-button-more').hover(function() { $(this).addClass('x-btn-focus'); }, function() { $(this).removeClass('x-btn-focus'); });
+
+    $mentionsPanel.find('.wrike-panel-title').append($onlyUnread);
+
     $('body').append($mentionsPanel);
   }
 
@@ -129,6 +156,9 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
       , lastMention;
 
     $(mentions).each(function (mentionIndex, mention) {
+      // If we're only showing unread comments, skip anything that has been read
+      if (unreadOnly === true && mention.comment.isRead === true) { return; }
+
       var data = {
         commentAuthor: $wrike.user(mention.comment.entryUid).data(),
         taskAuthor: $wrike.user(mention.task.uid).data(),
@@ -327,6 +357,9 @@ define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) 
     }\
     \
     #powerwrike-mentions-list { margin-bottom: 0; top: 45px; position: fixed; bottom: 27px; right: 9px; width: 512px; }\
+    #powerwrike-mentions-list .unread-toggle { position: absolute; right: 6px; top: 6px; }\
+    #powerwrike-mentions-list .unread-toggle .wspace-button-more { background: #fff; }\
+    #powerwrike-mentions-list .unread-toggle .wrike-button-checkbox { display: inline; }\
     #powerwrike-mentions-list .x-panel-body { overflow: auto; position: absolute; bottom: 0; top: 39px; }\
     #powerwrike-mentions-list .stream-task-entry.unread { background: cornsilk; }\
     #powerwrike-mentions-list .stream-task-entry .comment-wrap { margin-right: 20px; word-break: break-word; }\
