@@ -11,7 +11,7 @@ define(['js/debug', 'lib/EventEmitter'], function (debug, EventEmitter) {
 
   function taskSelected(task) {
     debug.debug('Task Selected', task);
-    ee.emitEvent('task.selected', task);
+    ee.emitEvent('task.selected', [task]);
   }
 
   $wrike.bus.on('list.tasklist.task.selected', taskSelected);
@@ -25,7 +25,7 @@ define(['js/debug', 'lib/EventEmitter'], function (debug, EventEmitter) {
   $wrike.bus.on("notifier.EventCommentAdded", commentAdded);
 
   function notificationShown(notification) {
-    ee.emitEvent('notification.shown', notification);
+    ee.emitEvent('notification.shown', [notification]);
   }
  
   $wrike.bus.on('desktop.notification.open.item', notificationShown);
