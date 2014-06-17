@@ -38,7 +38,7 @@ define(['js/debug', 'js/dropdown', 'js/folders', 'js/task', 'js/events'], functi
 
     // Do we need to rerender the button, or can we just update the text?
     var activeFolder = task.getActiveFolder(currentTask, clients, 'Please select a client tag');
-    if ($.contains(document, menu.$button[0]) === true) {
+    if ($.contains(task.getTaskElement(), menu.$button[0]) === true) {
       menu.setActive(activeFolder);
     } else {
       menu.renderButton(activeFolder);

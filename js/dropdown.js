@@ -66,7 +66,7 @@ define(['js/debug', 'js/statuses', 'js/task', 'js/styles'], function (debug, sta
   Dropdown.prototype.renderButton = function renderButton(active) {
     var self = this;
 
-    var $task = $('.wspace-task-view');
+    var $task = task.getTaskElement();
 
     // Hide the Wrike Status selector
     $task.find('.ct-status').remove();

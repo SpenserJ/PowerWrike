@@ -9,6 +9,7 @@ function initialize() {
     require('js/menu_client');
     require('js/menu_status');
     require('js/mentions');
+    require('js/templates');
     debug.info('Ready!');
   });
 }

@@ -1,4 +1,8 @@
 define(['js/debug', 'js/statuses', 'js/events'], function (debug, statuses, ee) {
+  function getTaskElement() {
+    return $('.wspace-task-view:last');
+  }
+
   function getCurrentTask() {
     // Get the closest Ext Component
     var currentTask = Ext.getCmp($('.wspace-task-view').closest('[id^="ext-comp-"]').attr('id')) || Ext.getCmp('details;task');
@@ -112,6 +116,7 @@ define(['js/debug', 'js/statuses', 'js/events'], function (debug, statuses, ee) 
   setDefaultTaskStatus();
 
   return {
+    getTaskElement: getTaskElement,
     getCurrentTask: getCurrentTask,
     getCurrentTaskId: getCurrentTaskId,
     changeFolderByGroup: changeFolderByGroup,
