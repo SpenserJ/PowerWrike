@@ -39,6 +39,5 @@ A list of pages on which to install',
     }
   };
 
-  events.on('task.changed', shouldRender);
   events.on('task.selected', shouldRender);
 });

@@ -31,7 +31,7 @@ define(['js/debug', 'js/statuses', 'js/task', 'js/styles'], function (debug, sta
     // Remove the dropdown if it already exists
     if (self.$dropdown !== null) { self.$dropdown.remove(); }
 
-    self.$dropdown = $('<div id="' + self.properties.id + '" class="powerwrike-dropdown x-menu x-menu-floating x-layer wspace-task-widgets-status-menu w4-shadow-frame w4-animation-fadein" style="position: absolute; z-index: 15000; visibility: hidden; left: -10000px; top: -10000px;"><a class="x-menu-focus" href="#" onclick="return false;" tabindex="-1"></a><ul class="x-menu-list"></ul></div>');
+    self.$dropdown = $('<div id="' + self.properties.id + '" class="powerwrike powerwrike-dropdown x-menu x-menu-floating x-layer wspace-task-widgets-status-menu w4-shadow-frame w4-animation-fadein" style="position: absolute; z-index: 15000; visibility: hidden; left: -10000px; top: -10000px;"><a class="x-menu-focus" href="#" onclick="return false;" tabindex="-1"></a><ul class="x-menu-list"></ul></div>');
 
     $.each(self.items, function (index, itemDetails) {
       /*jshint multistr: true */
@@ -76,7 +76,7 @@ define(['js/debug', 'js/statuses', 'js/task', 'js/styles'], function (debug, sta
 
     /*jshint multistr: true */
     self.$button = $('\
-<div class="powerwrike-dropdown-button" id="' + self.properties.id + '-button" style="float: left;">\
+<div class="powerwrike powerwrike-dropdown-button" id="' + self.properties.id + '-button" style="float: left;">\
   <div class="wspace-task-settings-button x-btn-noicon">\
     <div class="wspace-task-tb-button-value"></div>\
   </div>\

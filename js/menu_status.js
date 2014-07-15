@@ -50,7 +50,5 @@ define(['js/debug', 'js/dropdown', 'js/statuses', 'js/task', 'js/events'], funct
   };
 
   // Task updated
-  events.addListener('task.changed', shouldUpdateStatusDropdown);
   events.addListener('task.selected', shouldUpdateStatusDropdown);
-  shouldUpdateStatusDropdown();
 });
