@@ -88,7 +88,7 @@ define(['js/debug', 'lib/EventEmitter'], function (debug, EventEmitter) {
     observers[observerName] = observer;
   }
 
-  $(document).ready(function() {
+  function setupObserverOverlay() {
     var overlayObserver = new WebKitMutationObserver(function(mutations, observer) {
       $.each(mutations, function (i, mutation) {
         $.each(mutation.addedNodes, function (i2, node) {
@@ -111,6 +111,15 @@ define(['js/debug', 'lib/EventEmitter'], function (debug, EventEmitter) {
         setTimeout(taskSelected, 500);
       }
     }
+  }
+
+  function setupObserverSidebar() {
+    var taskSelector = '.viewport-center-center > .x-panel-bwrap > .x-panel-body';
+    var $sidebar = $(taskSelector);
+    // If we don't have the sidebar yet, check again in 100ms and try again
+    if ($sidebar.length === 0) {
+      return setTimeout(setupObserverSidebar, 100);
+    }
 
     var taskObserver = new WebKitMutationObserver(function(mutations, observer) {
       $.each(mutations, function (i, mutation) {
@@ -123,15 +132,19 @@ define(['js/debug', 'lib/EventEmitter'], function (debug, EventEmitter) {
         });
       });
     });
-    var taskSelector = '.viewport-center-center > .x-panel-bwrap > .x-panel-body';
-    taskObserver.observe($(taskSelector)[0], { childList: true });
-    if ($(taskSelector + ':not(:has(.wspace-dashboard-root))').length > 0) {
+    taskObserver.observe($sidebar[0], { childList: true });
+    if ($sidebar.has('.wspace-dashboard-root').length === 0) {
       debug.debug('Detected sidebar on first load');
       observeForTasks('sidebar', $(taskSelector + ' .x-border-panel:last')[0]);
       if ($(taskSelector + ' .x-border-panel:last .wspace-task-view').length > 0) {
         setTimeout(taskSelected, 500);
       }
     }
+  }
+
+  $(document).ready(function() {
+    setupObserverOverlay();
+    setupObserverSidebar();
   });
 
   return ee;
