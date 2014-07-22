@@ -14,6 +14,8 @@ function initialize() {
   });
 }
 
-// If Wrike has already loaded the folders, initialize immediately, otherwise wait for the folders to load
-if ($w.folders.isLoaded === true) { initialize(); }
-else { $wrike.bus.on('data.folders.loaded', function () { setTimeout(initialize, 250); }); }
+$wrike.bus.on('wrike.ready', function () {
+  // If Wrike has already loaded the folders, initialize immediately, otherwise wait for the folders to load
+  if ($w.folders.isLoaded === true) { initialize(); }
+  else { $wrike.bus.on('data.folders.loaded', function () { setTimeout(initialize, 250); }); }
+});

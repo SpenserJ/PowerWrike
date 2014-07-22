@@ -76,7 +76,7 @@ define(['js/debug', 'js/statuses', 'js/events'], function (debug, statuses, ee) 
       , folderNames = $.map(folderGroup, function (folder) { return folder.powerWrike.uniquePath; });
 
     // Hide the matching folder tags
-    $task.find('.wspace-task-widgets-tags .wspace-tag-simple').filter(function() {
+    $task.find('.wspace-task-widgets-tags .wspace-tag-simple:visible').filter(function() {
       return ($.inArray($(this).text(), folderNames) !== -1);
     }).hide();
   }

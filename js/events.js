@@ -33,17 +33,11 @@ define(['js/debug', 'lib/EventEmitter'], function (debug, EventEmitter) {
   var ignoreClasses = /(etherpad-|CodeMirror-)/;
 
   function observeForTasks(observerName, element) {
-    console.log(arguments);
     if (typeof observers[observerName] !== 'undefined') {
       observers[observerName].disconnect();
     }
 
-    var observer = new MutationObserver(function(mutations, observer) {
-      // If we've recently tracked an update for this observer, reset our timer
-      if (typeof fireAfterUpdate[observerName] !== 'undefined') {
-        clearTimeout(fireAfterUpdate[observerName]);
-      }
-
+    var observer = new WebKitMutationObserver(function(mutations, observer) {
       // Flatten an array of all mutations' addedNodes
       var added = [];
       $.each(mutations, function (i, mutation) {
@@ -51,6 +45,9 @@ define(['js/debug', 'lib/EventEmitter'], function (debug, EventEmitter) {
         if (ignoreClasses.test(mutation.target.className) === true) { return; }
 
         $.each(mutation.addedNodes, function (i2, node) {
+          // Ignore mutations that don't have a node.
+          // The node was likely deleted after we received the event
+          if (typeof node === 'undefined') { return; }
           // Ignore certain targets for mutation events
           if (ignoreClasses.test(node.className) === true) { return; }
           // Skip anything related to powerwrike
@@ -62,6 +59,11 @@ define(['js/debug', 'lib/EventEmitter'], function (debug, EventEmitter) {
 
       // If nothing has been added, cancel out
       if (added.length === 0) { return; }
+
+      // If we've recently tracked an update for this observer, reset our timer
+      if (typeof fireAfterUpdate[observerName] !== 'undefined') {
+        clearTimeout(fireAfterUpdate[observerName]);
+      }
 
       // If we've added any nodes, try to find a related task
       var $task = $(added[0]).closest('.wspace-task-view');
@@ -87,12 +89,15 @@ define(['js/debug', 'lib/EventEmitter'], function (debug, EventEmitter) {
   }
 
   $(document).ready(function() {
-    var overlayObserver = new MutationObserver(function(mutations, observer) {
+    var overlayObserver = new WebKitMutationObserver(function(mutations, observer) {
       $.each(mutations, function (i, mutation) {
         $.each(mutation.addedNodes, function (i2, node) {
+          // Ignore mutations that don't have a node.
+          // The node was likely deleted after we received the event
+          if (typeof node === 'undefined') { return; }
           // If we're on the dashboard
           if ($.inArray('w2-overlay-wrapper', node.classList) > -1) {
-            debug.warn('Detected overlay change');
+            debug.debug('Detected overlay change');
             observeForTasks('overlay', $(node).find('.x-plain-body')[0]);
           }
         });
@@ -100,16 +105,19 @@ define(['js/debug', 'lib/EventEmitter'], function (debug, EventEmitter) {
     });
     overlayObserver.observe(document.body, { childList: true });
     if ($('.w2-overlay-wrapper').length > 0) {
-      debug.warn('Detected overlay on first load');
+      debug.debug('Detected overlay on first load');
       observeForTasks('overlay', $('.w2-overlay-wrapper .x-plain-body')[0]);
+      if ($('.w2-overlay-wrapper .x-plain-body .wspace-task-view').length > 0) {
+        setTimeout(taskSelected, 500);
+      }
     }
 
-    var taskObserver = new MutationObserver(function(mutations, observer) {
+    var taskObserver = new WebKitMutationObserver(function(mutations, observer) {
       $.each(mutations, function (i, mutation) {
         $.each(mutation.addedNodes, function (i2, node) {
           // If we're not on the dashboard
           if ($.inArray('wspace-dashboard-root', node.classList) === -1) {
-            debug.warn('Detected sidebar change');
+            debug.debug('Detected sidebar change');
             observeForTasks('sidebar', $(node).find('.x-border-panel:last')[0]);
           }
         });
@@ -118,8 +126,11 @@ define(['js/debug', 'lib/EventEmitter'], function (debug, EventEmitter) {
     var taskSelector = '.viewport-center-center > .x-panel-bwrap > .x-panel-body';
     taskObserver.observe($(taskSelector)[0], { childList: true });
     if ($(taskSelector + ':not(:has(.wspace-dashboard-root))').length > 0) {
-      debug.warn('Detected sidebar on first load');
+      debug.debug('Detected sidebar on first load');
       observeForTasks('sidebar', $(taskSelector + ' .x-border-panel:last')[0]);
+      if ($(taskSelector + ' .x-border-panel:last .wspace-task-view').length > 0) {
+        setTimeout(taskSelected, 500);
+      }
     }
   });
 
