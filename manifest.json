@@ -11,8 +11,7 @@
   "web_accessible_resources": [
     "js/*",
     "lib/*",
-    "wrikeharder.js",
-    "powerwrike.js",
+    "index.js",
     "config.js"
   ],
   "manifest_version": 2
