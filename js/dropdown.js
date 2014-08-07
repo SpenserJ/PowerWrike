@@ -1,4 +1,4 @@
-define(['js/debug', 'js/statuses', 'js/task', 'js/styles'], function (debug, statuses, task, styles) {
+define(['debug', 'statuses', 'task', 'styles'], function (debug, statuses, task, styles) {
   var dropdowns = {}
     , stylesLoaded = false;
 

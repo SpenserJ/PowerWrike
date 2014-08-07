@@ -1,4 +1,4 @@
-define(['config', 'js/folders'], function (config, folders) {
+define(['config', 'folders'], function (config, folders) {
   var wrikeStates = { 'active': 0, 'completed': 1, 'deferred': 2, 'cancelled': 3 };
 
   var statusFolders = folders.getSubfolders(config.statusFolder)

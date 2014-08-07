@@ -1,4 +1,4 @@
-define(['js/debug', 'lib/EventEmitter'], function (debug, EventEmitter) {
+define(['debug', 'lib/EventEmitter'], function (debug, EventEmitter) {
   var ee = new EventEmitter();
 
   /*

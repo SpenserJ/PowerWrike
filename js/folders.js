@@ -1,4 +1,4 @@
-define(['js/debug'], function (debug) {
+define(['debug'], function (debug) {
   function getSubfolders(path) {
     var parentFolderId = $w.folders.findBy(function(test) {
       return test.data.titlePath === path;

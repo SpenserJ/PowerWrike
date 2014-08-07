@@ -1,4 +1,4 @@
-define(['js/debug', 'js/events', 'js/task', 'js/dropdown'], function (debug, events, task, dropdown) {
+define(['debug', 'events', 'task', 'dropdown'], function (debug, events, task, dropdown) {
   var templates = {
     /*jshint multistr: true */
     'QA - Tabs': 'Please turn the following items into checkboxes!\n\n\

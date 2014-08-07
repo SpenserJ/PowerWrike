@@ -1,4 +1,4 @@
-define(['js/debug', 'js/statuses', 'js/events'], function (debug, statuses, ee) {
+define(['debug', 'statuses', 'events'], function (debug, statuses, ee) {
   function getTaskElement() {
     return $('.wspace-task-view:last');
   }

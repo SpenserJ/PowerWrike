@@ -1,4 +1,4 @@
-define(['js/debug'], function (debug) {
+define(['debug'], function (debug) {
   var $styles = $('<style type="text/css"></style>').appendTo('head')
     , renderedStyles = {};
 

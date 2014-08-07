@@ -1,4 +1,4 @@
-define(['js/debug', 'js/dropdown', 'js/folders', 'js/task', 'js/events'], function (debug, dropdown, folders, task, events) {
+define(['debug', 'dropdown', 'folders', 'task', 'events'], function (debug, dropdown, folders, task, events) {
   var items = []
     , currentTask = task.getCurrentTask()
     , menu

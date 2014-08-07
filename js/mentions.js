@@ -1,4 +1,4 @@
-define(['js/debug', 'js/events', 'js/styles'], function (debug, events, styles) {
+define(['debug', 'events', 'styles'], function (debug, events, styles) {
   var mentions = []
     , processedMentions = []
     , $mentionsPanel
