@@ -1,20 +1,28 @@
 define(['debug', 'dropdown', 'folders', 'task', 'events'], function (debug, dropdown, folders, task, events) {
   var items = []
-    , currentTask = task.getCurrentTask()
     , menu
-    , clientFolders = folders.getSubfolders('/__SS_Client Tags')
     , clients = {};
 
-  // If we couldn't load the client folder, don't build the menu
-  if (clientFolders === false) { return; }
+  function initialize() {
+    var clientFolders = folders.getSubfolders('/__SS_Client Tags')
+    // If we couldn't load the client folder, don't build the menu
+    if (clientFolders === false) { return; }
 
-  $.each(clientFolders, function (i, clientFolder) {
-    clients[clientFolder.data.title] = clientFolder;
-    items.push({
-      name: clientFolder.data.title,
-      color: clientFolder.powerWrike.colorClass,
+    $.each(clientFolders, function (i, clientFolder) {
+      clients[clientFolder.data.title] = clientFolder;
+      items.push({
+        name: clientFolder.data.title,
+        color: clientFolder.powerWrike.colorClass,
+      });
     });
-  });
+
+    // If there aren't any clients loaded, don't build the menu
+    if (items.length === 0) { return; }
+
+    // Task updated
+    events.addListener('task.selected', shouldUpdateStatusDropdown);
+    events.addListener('task.changed', shouldUpdateStatusDropdown);
+  }
 
   function menuItemClicked($item) {
     var currentTask = task.getCurrentTaskId();
@@ -22,22 +30,27 @@ define(['debug', 'dropdown', 'folders', 'task', 'events'], function (debug, drop
     task.changeFolderByGroup(currentTask, clients[$item.text().trim()], clients);
   }
 
-  var activeFolder = task.getActiveFolder(currentTask, clients, 'Please select a client tag');
-  menu = dropdown.createDropdown('client', items, activeFolder, menuItemClicked);
-
   var shouldUpdateStatusDropdown = function shouldUpdateStatusDropdown(record) {
     var currentTask = task.getCurrentTask();
-    if (currentTask === false || (typeof record !== 'undefined' && currentTask.id !== record.id)) { return; }
+    // Return if we're not focused on the task that is being updated
+    if (currentTask.id !== record.id) { return; }
 
-    if (typeof record !== 'undefined') { currentTask = record; }
+    currentTask = record;
+    // If we're using an updated record, ensure the data property is set
+    if (typeof currentTask.data === 'undefined') { currentTask.data = record; }
 
     // If we have a current task, but it isn't fully loaded, try again in 100ms
     if (typeof currentTask.data === 'undefined' || typeof currentTask.data.parentFolders === 'undefined') {
+      debug.warn('Current task waiting for data', currentTask, record);
       return setTimeout(function() { shouldUpdateStatusDropdown(record); }, 100);
     }
 
-    // Do we need to rerender the button, or can we just update the text?
     var activeFolder = task.getActiveFolder(currentTask, clients, 'Please select a client tag');
+    if (typeof menu === 'undefined') {
+      menu = dropdown.createDropdown('client', items, activeFolder, menuItemClicked);
+    }
+
+    // Do we need to rerender the button, or can we just update the text?
     if ($.contains(task.getTaskElement(), menu.$button[0]) === true) {
       menu.setActive(activeFolder);
     } else {
@@ -49,6 +62,5 @@ define(['debug', 'dropdown', 'folders', 'task', 'events'], function (debug, drop
     setTimeout(function() { task.hideFolderTags(clients); }, 500);
   };
 
-  // Task updated
-  events.addListener('task.selected', shouldUpdateStatusDropdown);
+  events.addListener('ready', initialize);
 });
