@@ -30,9 +30,14 @@ define(['debug', 'lib/EventEmitter'], function (debug, EventEmitter) {
   function monitorDisplay() {
     var cmpCenter = Ext.getCmp($('.viewport-center-center').attr('id'));
     cmpCenter.on('add', function (target, added, depth) {
+      if (added.region !== 'center') { return; }
       // If we're switching to the folder list, monitor it for any new tasks
-      if (added.bodyCssClass === 'w4-folder-overview-body') {
-        loadedTaskList();
+      if (added instanceof $wspace.folder.View === true) {
+        // Not a great solution, but a delay of 500ms ensures that maximizing
+        // dashboard panes will retrigger the list view support.
+        // For some reason the view isn't loaded in time otherwise.
+        if (added.rendered === true) { loadedTaskList(); }
+        else { setTimeout(loadedTaskList, 500); }
       }
     });
 
