@@ -29,25 +29,32 @@ define(['debug', 'lib/EventEmitter'], function (debug, EventEmitter) {
 
   function monitorDisplay() {
     var cmpCenter = Ext.getCmp($('.viewport-center-center').attr('id'));
-    cmpCenter.on('add', function (target, added, depth) {
-      if (added.region !== 'center') { return; }
-      // If we're switching to the folder list, monitor it for any new tasks
-      if (added instanceof $wspace.folder.View === true) {
-        // Not a great solution, but a delay of 500ms ensures that maximizing
-        // dashboard panes will retrigger the list view support.
-        // For some reason the view isn't loaded in time otherwise.
-        if (added.rendered === true) { loadedTaskList(); }
-        else { setTimeout(loadedTaskList, 500); }
-      }
-    });
+    if (typeof cmpCenter !== 'undefined') {
+      cmpCenter.on('add', function (target, added, depth) {
+        if (added.region !== 'center') { return; }
+        // If we're switching to the folder list, monitor it for any new tasks
+        if (added instanceof $wspace.folder.View === true) {
+          // Not a great solution, but a delay of 500ms ensures that maximizing
+          // dashboard panes will retrigger the list view support.
+          // For some reason the view isn't loaded in time otherwise.
+          if (added.rendered === true) { loadedTaskList(); }
+          else { setTimeout(loadedTaskList, 500); }
+        }
+      });
+    }
 
     // If the list is already visible on first load, monitor it
     loadedTaskList();
 
+    // If a task is already visible on first load, monitor it
+    loadedTask();
+
     // Monitor the overlay for any changes
     var cmpOverlay = $wspace.overlay.View.getInstance($wrike.bus);
-    cmpOverlay.on('show', overlayShown);
-    if (cmpOverlay.hidden === false) { overlayShown(cmpOverlay); }
+    if (typeof cmpOverlay !== 'undefined') {
+      cmpOverlay.on('show', overlayShown);
+      if (cmpOverlay.hidden === false) { overlayShown(cmpOverlay); }
+    }
   }
 
   function overlayShown(overlay) {
@@ -65,7 +72,9 @@ define(['debug', 'lib/EventEmitter'], function (debug, EventEmitter) {
 
     // Monitor the right pane for new elements, and monitor any new tasks
     cmpRight.on('add', function (target, added, depth) { monitorTask(added); });
+  }
 
+  function loadedTask() {
     // If a task is already visible, monitor it for changes
     var cmpTask = Ext.getCmp('details;task');
     if (typeof cmpTask !== 'undefined') { monitorTask(cmpTask); }
