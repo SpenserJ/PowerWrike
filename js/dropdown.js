@@ -121,7 +121,7 @@ define(['debug', 'statuses', 'task', 'styles'], function (debug, statuses, task,
 '.powerwrike-dropdown-button .wspace-task-settings-button { padding: 0 5px; line-height: 54px; }' +
 '.w4-task-statebar { padding-left: 21px; }' +
 '.powerwrike-dropdown-button .wspace-tag-simple { margin-right: 0; }' +
-'.powerwrike-dropdown .x-menu-list { padding: 0; }' +
+'.powerwrike-dropdown .x-menu-list { padding: 0; max-height: 50vh; overflow-y: auto; }' +
 '.powerwrike-dropdown a.x-menu-item { padding: 5px; }'
       );
     }
