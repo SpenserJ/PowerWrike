@@ -83,8 +83,6 @@ define(['debug', 'events', 'styles'], function (debug, events, styles) {
       });
     });
 
-    if (yourMentions.length === 0) { return { success: function(){} }; }
-
     // If this is not our first run, emit an event for any new mentions
     if (firstRun === true) { firstRun = false; }
     else { events.emitEvent('mention', yourMentions); }
