@@ -14,7 +14,7 @@ define(['debug'], function (debug) {
         colorClass: 'no-color',
       };
 
-      if (val.data.systemFields !== null && val.data.systemFields.iconCls !== null) {
+      if (val.data.systemFields !== null && typeof val.data.systemFields.iconCls !== 'undefined') {
         val.powerWrike.colorClass = val.data.systemFields.iconCls.replace('w3-custom-node-', '');
       }
     });
