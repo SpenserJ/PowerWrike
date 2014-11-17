@@ -326,6 +326,7 @@ define(['debug', 'events', 'styles'], function (debug, events, styles) {
   }
 
   styles.addStyle('mentions', /*jshint multistr: true */ '\
+    .wrike_header_links { width: 240px; }\
     .wspace_header_mentions .count {\
       display: inline-block;\
       background: red;\
