@@ -34,7 +34,6 @@ define(['debug', 'dropdown', 'statuses', 'task', 'events'], function (debug, dro
 
     // If we have a current task, but it isn't fully loaded, try again in 100ms
     if (typeof currentTask.data === 'undefined' || typeof currentTask.data.parentFolders === 'undefined') {
-      debug.warn('Current task waiting for data', currentTask, record);
       return setTimeout(function() { shouldUpdateStatusDropdown(record); }, 100);
     }
 
