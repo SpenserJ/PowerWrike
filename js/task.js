@@ -112,8 +112,39 @@ define(['debug', 'statuses', 'events'], function (debug, statuses, ee) {
     return getActiveFolder(currentTask, statuses.statuses, 'Select a status');
   }
 
+  function highlightChildTaskStatuses() {
+    var activeStatus = getActiveStatus()
+      , currentTask = getCurrentTask();
+
+    if (currentTask === false) { return; }
+
+    // Wait until the current task is fully loaded
+    if (typeof currentTask.data === 'undefined' || typeof currentTask.data.subTaskIds === 'undefined') {
+      return setTimeout(function() { highlightChildTaskStatuses(); }, 100);
+    }
+
+    $.each(currentTask.data.subTaskIds, function (i, taskId) {
+      var subtask = new $wrike.record.Task({ id: taskId }, taskId);
+      subtask.load(function (data) {
+        if (data.loaded !== true) {
+          debug.error('An error occurred loading task #' + taskId);
+          return;
+        }
+
+        var task = data.data;
+        var statusFolder = getActiveFolder(data, statuses.statuses, 'Select a status');
+        var $row = $(document.getElementById('o-task;subtasks;task=' + taskId));
+        var $title = $row.find('[wrike-task-view-row-info-title]');
+        $title.before('<span wrike-task-view-tag wrike-task-view-tag-flavor=' + statusFolder.color + '>' + statusFolder.name + '</span>');
+      }, !0, 'refresh');
+    });
+  }
+
   ee.addListener('task.selected', setDefaultTaskStatus);
   setDefaultTaskStatus();
+
+  ee.addListener('task.selected', highlightChildTaskStatuses);
+  highlightChildTaskStatuses();
 
   return {
     getTaskElement: getTaskElement,
