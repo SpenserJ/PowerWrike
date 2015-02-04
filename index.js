@@ -17,6 +17,7 @@ function initialize() {
   requireLocal([
       'debug',
       'events',
+      'dashboard',
       'menu_status',
       'menu_department',
       'menu_client',
@@ -25,6 +26,7 @@ function initialize() {
     ], function (
       debug,
       events,
+      dashboard,
       menu_status,
       menu_department,
       menu_client,
