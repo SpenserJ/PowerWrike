@@ -134,8 +134,8 @@ define(['debug', 'statuses', 'events'], function (debug, statuses, ee) {
         var task = data.data;
         var statusFolder = getActiveFolder(data, statuses.statuses, 'Select a status');
         var $row = $(document.getElementById('o-task;subtasks;task=' + taskId));
-        var $title = $row.find('[wrike-task-view-row-info-title]');
-        $title.before('<span wrike-task-view-tag wrike-task-view-tag-flavor=' + statusFolder.color + '>' + statusFolder.name + '</span>');
+        var $insertPoint = $row.find('[wrike-task-view-deadline]');
+        $insertPoint.before('<span wrike-task-view-tag wrike-task-view-tag-flavor=' + statusFolder.color + '>' + statusFolder.name + '</span>');
       }, !0, 'refresh');
     });
   }
