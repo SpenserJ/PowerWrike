@@ -133,9 +133,24 @@ define(['debug', 'statuses', 'events'], function (debug, statuses, ee) {
 
         var task = data.data;
         var statusFolder = getActiveFolder(data, statuses.statuses, 'Select a status');
-        var $row = $(document.getElementById('o-task;subtasks;task=' + taskId));
-        var $insertPoint = $row.find('[wrike-task-view-deadline]');
-        $insertPoint.before('<span wrike-task-view-tag wrike-task-view-tag-flavor=' + statusFolder.color + '>' + statusFolder.name + '</span>');
+        var insertChildStatusInterval;
+        var total = 0;
+        // We need to do some crazy interval logic to ensure Wrike has rendered
+        // the elements by the time we have our status element ready.
+        var insertChildStatus = function () {
+          var $row = $('[id="o-task;subtasks;task=' + taskId + '"], [id="details;task;subtasks;task=' + taskId + '"]');
+
+          total++;
+          if ($row.find('.powerwrike-status').length !== 0 || total > 10) {
+            clearInterval(insertChildStatusInterval);
+            return;
+          }
+
+          if ($row.length === 0) { return; }
+          var $insertPoint = $row.find('[wrike-task-view-deadline]');
+          $insertPoint.before('<span class="powerwrike-status" wrike-task-view-tag wrike-task-view-tag-flavor=' + statusFolder.color + '>' + statusFolder.name + '</span>');
+        }
+        insertChildStatusInterval = setInterval(insertChildStatus, 100);
       }, !0, 'refresh');
     });
   }
