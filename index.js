@@ -22,7 +22,6 @@ function initialize() {
       'menu_department',
       'menu_client',
       'templates',
-      'mentions',
     ], function (
       debug,
       events,
@@ -30,8 +29,7 @@ function initialize() {
       menu_status,
       menu_department,
       menu_client,
-      templates,
-      mentions
+      templates
     ) {
 
     // Give our debug library a message to prefix to the logs
